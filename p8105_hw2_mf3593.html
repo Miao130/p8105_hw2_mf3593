@@ -427,6 +427,50 @@ unemploy_df contains data record of year, month, unemployment from year
 1948 to 2015. It has 816 obs of 3 variables. The snp_pols combine all
 three datasets according to year and month columns, and it has 822 obs
 of 12 variables.</p>
+<pre class="r"><code>library(&quot;readxl&quot;)</code></pre>
+<pre class="r"><code>trash_df=read_excel(&quot;data/trashwheel.xlsx&quot;,sheet=&quot;Mr. Trash Wheel&quot;)|&gt;
+  janitor::clean_names()|&gt;
+  select(-c(&quot;x15&quot;,&quot;x16&quot;))|&gt;
+  drop_na(dumpster)|&gt;
+  mutate(homes_powered=(weight_tons*500)/30,
+         setname=&quot;Mr.Trash&quot;,
+         year=as.numeric(year))</code></pre>
+<pre><code>## New names:
+## • `` -&gt; `...15`
+## • `` -&gt; `...16`</code></pre>
+<pre class="r"><code>professor_df=read_excel(&quot;data/trashwheel.xlsx&quot;, sheet=&quot;Professor Trash Wheel&quot;)|&gt;
+  janitor::clean_names()|&gt;
+  drop_na(dumpster)|&gt;
+  mutate(homes_powered=(weight_tons*500)/30,
+         setname=&quot;Professor&quot;)
+
+Gwynnda_df=read_excel(&quot;data/trashwheel.xlsx&quot;, sheet=&quot;Gwynnda Trash Wheel&quot;)|&gt;
+  janitor::clean_names()|&gt;
+  drop_na(dumpster)|&gt;
+  mutate(homes_powered=(weight_tons*500)/30,
+         setname=&quot;Gwynnda&quot;)
+
+combined_df=bind_rows(trash_df,professor_df,Gwynnda_df)|&gt;
+  select(setname,everything())
+
+wt_prof=pull(professor_df, weight_tons)|&gt;sum()
+Gwynnda_cigarett=pull(Gwynnda_df[Gwynnda_df$month==&#39;July&#39; &amp; Gwynnda_df$year==2021,],cigarette_butts)|&gt;
+  sum()</code></pre>
+<p>There are 747 observations in total for three datasets combined.
+Mr. Trash_wheel dataset has the most number of observations (547) and
+most numbers of varaibles(15). Mr.Trashwheel dataset records information
+on dumpster, month, year, date, weight_tons, volume_cubic_yards,
+plastic_bottles, polystyrene, cigarette_butts, glass_bottles,
+grocery_bags, chip_bags, sports_balls, homes_powered, setname. Professor
+and Gwynnda dataset also collect data on the dumpsters and different
+types of trash there are. They recorded slightly different types of
+trash compared to Mr.Trashwheel dataset. For example, professor trash
+wheel doesn’t record number of sports_balls. Gwynnda Trash wheel doesn’t
+have records of glass_bottles, grocery_bags,chip_bags, and sports_balls,
+but it has records of number of plastic bags which the other two
+datasets don’t have. The total weight of trash collected by Professor
+Trash Wheel is 190.12. The total number of cigarette butts collected by
+Gwynnda in July of 2021 is 1.63^{4}</p>
 
 
 

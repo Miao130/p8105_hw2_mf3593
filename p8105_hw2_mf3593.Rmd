@@ -54,7 +54,31 @@ trash_df=read_excel("data/trashwheel.xlsx",sheet="Mr. Trash Wheel")|>
   janitor::clean_names()|>
   select(-c("x15","x16"))|>
   drop_na(dumpster)|>
-  mutate(homes_powered=(weight_tons*500)/30)
+  mutate(homes_powered=(weight_tons*500)/30,
+         setname="Mr.Trash",
+         year=as.numeric(year))
 ```
+```{r}
+professor_df=read_excel("data/trashwheel.xlsx", sheet="Professor Trash Wheel")|>
+  janitor::clean_names()|>
+  drop_na(dumpster)|>
+  mutate(homes_powered=(weight_tons*500)/30,
+         setname="Professor")
+
+Gwynnda_df=read_excel("data/trashwheel.xlsx", sheet="Gwynnda Trash Wheel")|>
+  janitor::clean_names()|>
+  drop_na(dumpster)|>
+  mutate(homes_powered=(weight_tons*500)/30,
+         setname="Gwynnda")
+
+combined_df=bind_rows(trash_df,professor_df,Gwynnda_df)|>
+  select(setname,everything())
+
+wt_prof=pull(professor_df, weight_tons)|>sum()
+Gwynnda_cigarett=pull(Gwynnda_df[Gwynnda_df$month=='July' & Gwynnda_df$year==2021,],cigarette_butts)|>
+  sum()
+```
+
+There are 747 observations in total for three datasets combined. Mr. Trash_wheel dataset has the most number of observations (547) and most numbers of varaibles(15). Mr.Trashwheel dataset records information on `r colnames(trash_df)`. Professor and Gwynnda dataset also collect data on the dumpsters and different types of trash there are. They recorded slightly different types of trash compared to Mr.Trashwheel dataset. For example, professor trash wheel doesn't record number of sports_balls. Gwynnda Trash wheel doesn't have records of glass_bottles, grocery_bags,chip_bags, and sports_balls, but it has records of number of plastic bags which the other two datasets don't have. The total weight of trash collected by Professor Trash Wheel is `r wt_prof`. The total number of cigarette butts collected by Gwynnda in July of 2021 is `r Gwynnda_cigarett`.
 
 
