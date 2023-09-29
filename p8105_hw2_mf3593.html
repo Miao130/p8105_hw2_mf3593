@@ -427,6 +427,8 @@ unemploy_df contains data record of year, month, unemployment from year
 1948 to 2015. It has 816 obs of 3 variables. The snp_pols combine all
 three datasets according to year and month columns, and it has 822 obs
 of 12 variables.</p>
+<div id="problem-2" class="section level2">
+<h2>Problem 2</h2>
 <pre class="r"><code>library(&quot;readxl&quot;)</code></pre>
 <pre class="r"><code>trash_df=read_excel(&quot;data/trashwheel.xlsx&quot;,sheet=&quot;Mr. Trash Wheel&quot;)|&gt;
   janitor::clean_names()|&gt;
@@ -470,7 +472,35 @@ have records of glass_bottles, grocery_bags,chip_bags, and sports_balls,
 but it has records of number of plastic bags which the other two
 datasets don’t have. The total weight of trash collected by Professor
 Trash Wheel is 190.12. The total number of cigarette butts collected by
-Gwynnda in July of 2021 is 1.63^{4}</p>
+Gwynnda in July of 2021 is 1.63^{4}.</p>
+</div>
+<div id="problem-3" class="section level2">
+<h2>Problem 3</h2>
+<pre class="r"><code>bl_df=read_csv(&quot;data_mci/MCI_baseline.csv&quot;,skip=1)|&gt;
+  janitor::clean_names()|&gt;
+  mutate(
+    sex=case_match( 
+      sex,
+    1 ~ &quot;Male&quot;,
+    0 ~ &quot;Female&quot;),
+    apoe4=case_match(
+      apoe4,
+    1 ~ &quot;APOE4 carrier&quot;,
+    0 ~ &quot;APOE4 non-carrier&quot;
+    ))</code></pre>
+<pre><code>## Rows: 483 Columns: 6
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (1): Age at onset
+## dbl (5): ID, Current Age, Sex, Education, apoe4
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>cleaned_bl=bl_df[bl_df$age_at_onset!=&#39;.&#39;,]</code></pre>
+<p>A total of 483 subjects were recruited for the baseline study. 97
+developed MCI. The average baseline age is 65.0467909. 29.8578199% of
+women in the study are APOE4 carriers.</p>
+</div>
 
 
 

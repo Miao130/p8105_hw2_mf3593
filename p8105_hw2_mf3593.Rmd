@@ -45,6 +45,7 @@ snp_pols=left_join(pols_df,snp_df,by=c("year","month"))|>
 
 The pols_df dataset contains data record of `r colnames(pols_df)` from year 1947 to 2015. It records number of people in republican and demographic senators, as well as which party the president is from. It has 822 obs of 9 varaibles. The snp_df dataset contains data record of `r colnames(snp_df)` from year 1950 to 2014. It has 787 obs of 4 variables. The unemploy_df contains data record of `r colnames(unemploy_df)` from year 1948 to 2015. It has 816 obs of 3 variables. The snp_pols combine all three datasets according to year and month columns, and it has 822 obs of 12 variables. 
 
+## Problem 2
 ```{r}
 library("readxl")
 ```
@@ -81,4 +82,28 @@ Gwynnda_cigarett=pull(Gwynnda_df[Gwynnda_df$month=='July' & Gwynnda_df$year==202
 
 There are 747 observations in total for three datasets combined. Mr. Trash_wheel dataset has the most number of observations (547) and most numbers of varaibles(15). Mr.Trashwheel dataset records information on `r colnames(trash_df)`. Professor and Gwynnda dataset also collect data on the dumpsters and different types of trash there are. They recorded slightly different types of trash compared to Mr.Trashwheel dataset. For example, professor trash wheel doesn't record number of sports_balls. Gwynnda Trash wheel doesn't have records of glass_bottles, grocery_bags,chip_bags, and sports_balls, but it has records of number of plastic bags which the other two datasets don't have. The total weight of trash collected by Professor Trash Wheel is `r wt_prof`. The total number of cigarette butts collected by Gwynnda in July of 2021 is `r Gwynnda_cigarett`.
 
+## Problem 3
+```{r}
+bl_df=read_csv("data_mci/MCI_baseline.csv",skip=1)|>
+  janitor::clean_names()|>
+  mutate(
+    sex=case_match( 
+      sex,
+    1 ~ "Male",
+    0 ~ "Female"),
+    apoe4=case_match(
+      apoe4,
+    1 ~ "APOE4 carrier",
+    0 ~ "APOE4 non-carrier"
+    ))
+
+cleaned_bl=bl_df[bl_df$age_at_onset!='.',]
+```
+The dataset includes information on subjects' sex, age, years of education, APOE4 carrier status, and age of onset of AD. A total of 483 subjects were recruited for the baseline study. 97 developed MCI. The average baseline age is `r mean(bl_df$current_age)`. `r (nrow(bl_df[bl_df$sex=='Female'&bl_df$apoe4=='APOE4 carrier',])/nrow(bl_df[bl_df$sex=='Female',]))*100`% of women in the study are APOE4 carriers.
+
+```{r}
+amyloid_df=read_csv("data_mci/mci_amyloid.csv", skip=1)|>
+  janitor::clean_names()|>
+  apply(c(1,2),function(x) ifelse(x=="Na", NA, x))
+```
 
