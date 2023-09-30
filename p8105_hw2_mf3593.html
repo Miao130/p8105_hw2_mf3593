@@ -357,6 +357,8 @@ display: none;
 </div>
 
 
+<div id="problem-1" class="section level2">
+<h2>Problem 1</h2>
 <pre class="r"><code>library(tidyverse)</code></pre>
 <pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ## ✔ dplyr     1.1.3     ✔ readr     2.1.4
@@ -427,6 +429,7 @@ unemploy_df contains data record of year, month, unemployment from year
 1948 to 2015. It has 816 obs of 3 variables. The snp_pols combine all
 three datasets according to year and month columns, and it has 822 obs
 of 12 variables.</p>
+</div>
 <div id="problem-2" class="section level2">
 <h2>Problem 2</h2>
 <pre class="r"><code>library(&quot;readxl&quot;)</code></pre>
@@ -497,9 +500,39 @@ Gwynnda in July of 2021 is 1.63^{4}.</p>
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 <pre class="r"><code>cleaned_bl=bl_df[bl_df$age_at_onset!=&#39;.&#39;,]</code></pre>
-<p>A total of 483 subjects were recruited for the baseline study. 97
-developed MCI. The average baseline age is 65.0467909. 29.8578199% of
-women in the study are APOE4 carriers.</p>
+<p>The dataset for baseline MCI includes information on subjects’ sex,
+age, years of education, APOE4 carrier status, and age of onset of AD. A
+total of 483 subjects were recruited for the baseline study. 97
+developed MCI. The average baseline age is 65.6113402. 65.2173913% of
+women in the baseline study are APOE4 carriers.</p>
+<pre class="r"><code>amyloid_df=read_csv(&quot;data_mci/mci_amyloid.csv&quot;, skip=1)|&gt;
+  janitor::clean_names()|&gt;
+  apply(c(1,2),function(x) ifelse(x==&quot;Na&quot;, NA, x))|&gt;
+  as.data.frame()|&gt;
+  mutate(study_id=as.numeric(study_id))|&gt;
+  rename(id=study_id)</code></pre>
+<pre><code>## Rows: 487 Columns: 6
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (5): Baseline, Time 2, Time 4, Time 6, Time 8
+## dbl (1): Study ID
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<p>The dataset for biomarker amyloid includes information on subjects
+time(in years) elapsed since the study baseline to the visit where
+biomarker amyloid 42/40 ratio was measured. A total of 5 times of
+records are included. The dataset has 487 rows and 6 columns.</p>
+<pre class="r"><code>bl_only=subset(cleaned_bl, !(id %in% amyloid_df$id))
+amyloid_only=subset(amyloid_df, !(id %in% cleaned_bl$id))
+combined_df_AD=inner_join(cleaned_bl,amyloid_df,by=&#39;id&#39;)
+write.csv(combined_df_AD, file=&quot;data_mci/combined_df.csv&quot;)</code></pre>
+<p>There are 3 subjects that is in the baseline study but not in amyloid
+dataset. There are 393 observations in the amyloid dataset only. The
+combined dataset of subjects records in both dataset has 94 rows and 11
+columns. It combines the varaibles recorded in both datasets, including
+id, current_age, sex, education, apoe4, age_at_onset, baseline, time_2,
+time_4, time_6, time_8</p>
 </div>
 
 

@@ -4,6 +4,8 @@ author: "Miao Fu"
 date: "2023-09-26"
 output: html_document
 ---
+
+## Problem 1
 ```{r}
 library(tidyverse)
 library(dplyr)
@@ -99,11 +101,23 @@ bl_df=read_csv("data_mci/MCI_baseline.csv",skip=1)|>
 
 cleaned_bl=bl_df[bl_df$age_at_onset!='.',]
 ```
-The dataset includes information on subjects' sex, age, years of education, APOE4 carrier status, and age of onset of AD. A total of 483 subjects were recruited for the baseline study. 97 developed MCI. The average baseline age is `r mean(bl_df$current_age)`. `r (nrow(bl_df[bl_df$sex=='Female'&bl_df$apoe4=='APOE4 carrier',])/nrow(bl_df[bl_df$sex=='Female',]))*100`% of women in the study are APOE4 carriers.
+The dataset for baseline MCI includes information on subjects' sex, age, years of education, APOE4 carrier status, and age of onset of AD. A total of 483 subjects were recruited for the baseline study. 97 developed MCI. The average baseline age is `r mean(cleaned_bl$current_age)`. `r (nrow(cleaned_bl[cleaned_bl$sex=='Female'&cleaned_bl$apoe4=='APOE4 carrier',])/nrow(cleaned_bl[cleaned_bl$sex=='Female',]))*100`% of women in the baseline study are APOE4 carriers.
 
 ```{r}
 amyloid_df=read_csv("data_mci/mci_amyloid.csv", skip=1)|>
   janitor::clean_names()|>
-  apply(c(1,2),function(x) ifelse(x=="Na", NA, x))
+  apply(c(1,2),function(x) ifelse(x=="Na", NA, x))|>
+  as.data.frame()|>
+  mutate(study_id=as.numeric(study_id))|>
+  rename(id=study_id)
+```
+The dataset for biomarker amyloid includes information on subjects time(in years) elapsed since the study baseline to the visit where biomarker amyloid 42/40 ratio was measured. A total of 5 times of records are included. The dataset has `r nrow(amyloid_df)` rows and `r ncol(amyloid_df)` columns. 
+
+```{r}
+bl_only=subset(cleaned_bl, !(id %in% amyloid_df$id))
+amyloid_only=subset(amyloid_df, !(id %in% cleaned_bl$id))
+combined_df_AD=inner_join(cleaned_bl,amyloid_df,by='id')
+write.csv(combined_df_AD, file="data_mci/combined_df.csv")
 ```
 
+There are 3 subjects that is in the baseline study but not in amyloid dataset. There are 393 observations in the amyloid dataset only. The combined dataset of subjects records in both dataset has 94 rows and 11 columns. It combines the varaibles recorded in both datasets, including `r colnames(combined_df_AD)`
