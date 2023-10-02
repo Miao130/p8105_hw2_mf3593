@@ -28,7 +28,7 @@ snp_df=read_csv("data/snp.csv")|>
   mutate(year=ifelse(as.numeric(year)>=0 & as.numeric(year)<=9,paste0("200",year),ifelse(as.numeric(year)<=15,paste0("20",year),paste0("19",year))),
          month=toupper(month.abb[as.numeric(month)]))|>
   arrange(month,year)|>
-  select(year,month,everything())
+  select(year,month,everything(),-day)
 ```
 ```{r}
 unemploy_df=read_csv("data/unemployment.csv")|>
@@ -45,7 +45,7 @@ snp_pols=left_join(pols_df,snp_df,by=c("year","month"))|>
   left_join(unemploy_df,by=c("year","month"))
 ```
 
-The pols_df dataset contains data record of `r colnames(pols_df)` from year 1947 to 2015. It records number of people in republican and demographic senators, as well as which party the president is from. It has 822 obs of 9 varaibles. The snp_df dataset contains data record of `r colnames(snp_df)` from year 1950 to 2014. It has 787 obs of 4 variables. The unemploy_df contains data record of `r colnames(unemploy_df)` from year 1948 to 2015. It has 816 obs of 3 variables. The snp_pols combine all three datasets according to year and month columns, and it has 822 obs of 12 variables. 
+The `pols_df` dataset contains data record of `r colnames(pols_df)` from year `r range(pols_df$year)[1]` to `r range (pols_df$year)[2]`. It records number of people in republican and demographic senators, as well as which party the president is from. It has `r nrow(pols_df)` rows and `r ncol(pols_df)` columns. The `snp_df` dataset contains data record of `r colnames(snp_df)` from year `r range(snp_df$year)[1]` to `r range (snp_df$year)[2]`. It has `r nrow(snp_df)` rows and `r ncol(snp_df)` columns. The `unemploy_df` contains data record of `r colnames(unemploy_df)` from year `r range(unemploy_df$year)[1]` to `r range (unemploy_df$year)[2]`. It has `r nrow(unemploy_df)` rows and `r ncol(unemploy_df)` columns. The `snp_pols` combine all three datasets according to year and month columns, and it has `r nrow(snp_pols)` rows and `r ncol(snp_pols)` columns. In Januarys in or after 1975 in which a democrat was president, the **average unemployment rate was `r filter(snp_pols, month == "JAN", year >= 1975, president == "dem") |> pull(unemployment) |> mean() |> round(2)`**.  The average unemployment rate over the same time period in which a republican was president was `r filter(snp_pols, month == "JAN", year >= 1975, president == "gop") |> pull(unemployment) |> mean() |> round(2)`.
 
 ## Problem 2
 ```{r}
@@ -82,7 +82,7 @@ Gwynnda_cigarett=pull(Gwynnda_df[Gwynnda_df$month=='July' & Gwynnda_df$year==202
   sum()
 ```
 
-There are 747 observations in total for three datasets combined. Mr. Trash_wheel dataset has the most number of observations (547) and most numbers of varaibles(15). Mr.Trashwheel dataset records information on `r colnames(trash_df)`. Professor and Gwynnda dataset also collect data on the dumpsters and different types of trash there are. They recorded slightly different types of trash compared to Mr.Trashwheel dataset. For example, professor trash wheel doesn't record number of sports_balls. Gwynnda Trash wheel doesn't have records of glass_bottles, grocery_bags,chip_bags, and sports_balls, but it has records of number of plastic bags which the other two datasets don't have. The total weight of trash collected by Professor Trash Wheel is `r wt_prof`. The total number of cigarette butts collected by Gwynnda in July of 2021 is `r Gwynnda_cigarett`.
+There are `r nrow(combined_df)` rows and `r ncol(combined_df)` columns in the `combined_df` data, which combines data from all three datasets. It contains information on quantity collected of different types of trash at each dumpster by Mr.Trash_Wheel, Professor Trash Wheel, and Gynnda Trash Wheel. Mr. Trash_wheel dataset has `r nrow(trash_df)` rows and `r ncol(trash_df)` columns. Mr.Trashwheel dataset records information on `r colnames(trash_df)`. Professor and Gwynnda dataset also collect data on the dumpsters and different types of trash there are. They recorded slightly different types of trash compared to Mr.Trashwheel dataset. For example, professor trash wheel doesn't record number of sports_balls. Gwynnda Trash wheel doesn't have records of glass_bottles, grocery_bags,chip_bags, and sports_balls, but it has records of number of plastic bags which the other two datasets don't have. The total weight of trash collected by Professor Trash Wheel is `r wt_prof`. The total number of cigarette butts collected by Gwynnda in July of 2021 is `r Gwynnda_cigarett`.
 
 ## Problem 3
 ```{r}
@@ -120,4 +120,4 @@ combined_df_AD=inner_join(cleaned_bl,amyloid_df,by='id')
 write.csv(combined_df_AD, file="data_mci/combined_df.csv")
 ```
 
-There are 3 subjects that is in the baseline study but not in amyloid dataset. There are 393 observations in the amyloid dataset only. The combined dataset of subjects records in both dataset has 94 rows and 11 columns. It combines the varaibles recorded in both datasets, including `r colnames(combined_df_AD)`
+There are `r nrow(bl_only` subjects that is in the baseline study only. There are `r nrow(amyloid_only)` observations in the `amyloid_only` data. The combined dataset of subjects records in both dataset has `r nrow(combined_df_AD)` rows and `r ncol(combined_df_AD)` columns. It combines the varaibles recorded in both datasets, including `r colnames(combined_df_AD)`
