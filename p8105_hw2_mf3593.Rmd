@@ -99,9 +99,9 @@ bl_df=read_csv("data_mci/MCI_baseline.csv",skip=1)|>
     0 ~ "APOE4 non-carrier"
     ))
 
-cleaned_bl=bl_df[bl_df$age_at_onset!='.',]
+cleaned_bl=filter(bl_df,age_at_onset>current_age|age_at_onset=='.')
 ```
-The dataset for baseline MCI includes information on subjects' sex, age, years of education, APOE4 carrier status, and age of onset of AD. A total of 483 subjects were recruited for the baseline study. 97 developed MCI. The average baseline age is `r mean(cleaned_bl$current_age)`. `r (nrow(cleaned_bl[cleaned_bl$sex=='Female'&cleaned_bl$apoe4=='APOE4 carrier',])/nrow(cleaned_bl[cleaned_bl$sex=='Female',]))*100`% of women in the baseline study are APOE4 carriers.
+The dataset for baseline MCI includes information on subjects' sex, age, years of education, APOE4 carrier status, and age of onset of AD. A total of `r nrow(cleaned_bl)` subjects were recruited for the baseline study.  `r nrow(cleaned_bl[cleaned_bl$age_at_onset!='.',])` developed MCI. The average baseline age is `r mean(cleaned_bl$current_age)`. `r (nrow(cleaned_bl[cleaned_bl$sex=='Female'&cleaned_bl$apoe4=='APOE4 carrier',])/nrow(cleaned_bl[cleaned_bl$sex=='Female',]))*100`% of women in the baseline study are APOE4 carriers.
 
 ```{r}
 amyloid_df=read_csv("data_mci/mci_amyloid.csv", skip=1)|>
@@ -120,4 +120,4 @@ combined_df_AD=inner_join(cleaned_bl,amyloid_df,by='id')
 write.csv(combined_df_AD, file="data_mci/combined_df.csv")
 ```
 
-There are `r nrow(bl_only` subjects that is in the baseline study only. There are `r nrow(amyloid_only)` observations in the `amyloid_only` data. The combined dataset of subjects records in both dataset has `r nrow(combined_df_AD)` rows and `r ncol(combined_df_AD)` columns. It combines the varaibles recorded in both datasets, including `r colnames(combined_df_AD)`
+There are `r nrow(bl_only)` subjects that is in the baseline study only. There are `r nrow(amyloid_only)` observations in the `amyloid_only` data. The combined dataset of subjects records in both dataset has `r nrow(combined_df_AD)` rows and `r ncol(combined_df_AD)` columns. It combines the varaibles recorded in both datasets, including `r colnames(combined_df_AD)`

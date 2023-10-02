@@ -506,12 +506,12 @@ number of cigarette butts collected by Gwynnda in July of 2021 is
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<pre class="r"><code>cleaned_bl=bl_df[bl_df$age_at_onset!=&#39;.&#39;,]</code></pre>
+<pre class="r"><code>cleaned_bl=filter(bl_df,age_at_onset&gt;current_age|age_at_onset==&#39;.&#39;)</code></pre>
 <p>The dataset for baseline MCI includes information on subjects’ sex,
 age, years of education, APOE4 carrier status, and age of onset of AD. A
-total of 483 subjects were recruited for the baseline study. 97
-developed MCI. The average baseline age is 65.6113402. 65.2173913% of
-women in the baseline study are APOE4 carriers.</p>
+total of 479 subjects were recruited for the baseline study. 93
+developed MCI. The average baseline age is 65.0286013. 30% of women in
+the baseline study are APOE4 carriers.</p>
 <pre class="r"><code>amyloid_df=read_csv(&quot;data_mci/mci_amyloid.csv&quot;, skip=1)|&gt;
   janitor::clean_names()|&gt;
   apply(c(1,2),function(x) ifelse(x==&quot;Na&quot;, NA, x))|&gt;
@@ -534,11 +534,11 @@ records are included. The dataset has 487 rows and 6 columns.</p>
 amyloid_only=subset(amyloid_df, !(id %in% cleaned_bl$id))
 combined_df_AD=inner_join(cleaned_bl,amyloid_df,by=&#39;id&#39;)
 write.csv(combined_df_AD, file=&quot;data_mci/combined_df.csv&quot;)</code></pre>
-<p>There are 3 subjects that is in the baseline study but not in amyloid
-dataset. There are 393 observations in the amyloid dataset only. The
-combined dataset of subjects records in both dataset has 94 rows and 11
-columns. It combines the varaibles recorded in both datasets, including
-id, current_age, sex, education, apoe4, age_at_onset, baseline, time_2,
+<p>There are 8 subjects that is in the baseline study only. There are 16
+observations in the <code>amyloid_only</code> data. The combined dataset
+of subjects records in both dataset has 471 rows and 11 columns. It
+combines the varaibles recorded in both datasets, including id,
+current_age, sex, education, apoe4, age_at_onset, baseline, time_2,
 time_4, time_6, time_8</p>
 </div>
 
