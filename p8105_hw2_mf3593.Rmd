@@ -82,7 +82,7 @@ Gwynnda_cigarett=pull(Gwynnda_df[pull(Gwynnda_df,month)=='July' & pull(Gwynnda_d
   sum()
 ```
 
-There are `r nrow(combined_df)` rows and `r ncol(combined_df)` columns in the `combined_df` data, which combines data from all three datasets. It contains information on quantity collected of different types of trash at each dumpster by Mr.Trash_Wheel, Professor Trash Wheel, and Gwynnda Trash Wheel. Mr. Trash_wheel dataset has `r nrow(trash_df)` rows and `r ncol(trash_df)` columns. Mr.Trashwheel dataset records information on `r colnames(trash_df)`. Professor and Gwynnda dataset also collect data on the dumpsters and different types of trash there are. The total weight of trash collected by Professor Trash Wheel is `r wt_prof`. The total number of cigarette butts collected by Gwynnda in July of 2021 is `r Gwynnda_cigarett`.
+There are `r nrow(combined_df)` rows and `r ncol(combined_df)` columns in the `combined_df` data, which combines data from all three datasets. It contains information on quantity collected of different types of trash at each dumpster by Mr.Trash_Wheel, Professor Trash Wheel, and Gwynnda Trash Wheel. Mr. Trash_wheel dataset has `r nrow(trash_df)` rows and `r ncol(trash_df)` columns. Mr.Trashwheel dataset records information on `r colnames(trash_df)`. Professor and Gwynnda dataset also collect data on the dumpsters and different types of trash there are. Professor `r nrow(professor_df)` rows and `r ncol(professor_df)` columns The total weight of trash collected by Professor Trash Wheel is `r wt_prof`. The total number of cigarette butts collected by Gwynnda in July of 2021 is `r Gwynnda_cigarett`.
 
 ## Problem 3
 ```{r}
@@ -120,4 +120,4 @@ combined_df_AD=inner_join(cleaned_bl,amyloid_df,by='id')
 write.csv(combined_df_AD, file="data_mci/combined_df.csv")
 ```
 
-There are `r nrow(bl_only)` subjects that is in the baseline study only. There are `r nrow(amyloid_only)` observations in the `amyloid_only` data. The combined dataset of subjects records in both dataset has `r nrow(combined_df_AD)` rows and `r ncol(combined_df_AD)` columns. It combines the varaibles recorded in both datasets, including `r colnames(combined_df_AD)`
+There are `r nrow(bl_only)` subjects that is in the baseline study only. There are `r nrow(amyloid_only)` observations in the `amyloid_only` data. The combined dataset of subjects records in both dataset has `r nrow(combined_df_AD)` rows and `r ncol(combined_df_AD)` columns. It combines the variables recorded in both datasets, including `r colnames(combined_df_AD)`
