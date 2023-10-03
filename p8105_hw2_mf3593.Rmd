@@ -53,7 +53,7 @@ library("readxl")
 ```
 
 ```{r}
-trash_df=read_excel("data/trashwheel.xlsx",sheet="Mr. Trash Wheel")|>
+trash_df=read_excel("data/2023trash.xlsx",sheet="Mr. Trash Wheel")|>
   janitor::clean_names()|>
   select(-c("x15","x16"))|>
   drop_na(dumpster)|>
@@ -62,13 +62,13 @@ trash_df=read_excel("data/trashwheel.xlsx",sheet="Mr. Trash Wheel")|>
          year=as.numeric(year))
 ```
 ```{r}
-professor_df=read_excel("data/trashwheel.xlsx", sheet="Professor Trash Wheel")|>
+professor_df=read_excel("data/2023trash.xlsx", sheet="Professor Trash Wheel")|>
   janitor::clean_names()|>
   drop_na(dumpster)|>
   mutate(homes_powered=(weight_tons*500)/30,
          setname="Professor")
 
-Gwynnda_df=read_excel("data/trashwheel.xlsx", sheet="Gwynnda Trash Wheel")|>
+Gwynnda_df=read_excel("data/2023trash.xlsx", sheet="Gwynnda Trash Wheel")|>
   janitor::clean_names()|>
   drop_na(dumpster)|>
   mutate(homes_powered=(weight_tons*500)/30,
