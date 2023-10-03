@@ -78,11 +78,11 @@ combined_df=bind_rows(trash_df,professor_df,Gwynnda_df)|>
   select(setname,everything())
 
 wt_prof=pull(professor_df, weight_tons)|>sum()
-Gwynnda_cigarett=pull(Gwynnda_df[Gwynnda_df$month=='July' & Gwynnda_df$year==2021,],cigarette_butts)|>
+Gwynnda_cigarett=pull(Gwynnda_df[pull(Gwynnda_df,month)=='July' & pull(Gwynnda_df,year)==2021,],cigarette_butts)|>
   sum()
 ```
 
-There are `r nrow(combined_df)` rows and `r ncol(combined_df)` columns in the `combined_df` data, which combines data from all three datasets. It contains information on quantity collected of different types of trash at each dumpster by Mr.Trash_Wheel, Professor Trash Wheel, and Gynnda Trash Wheel. Mr. Trash_wheel dataset has `r nrow(trash_df)` rows and `r ncol(trash_df)` columns. Mr.Trashwheel dataset records information on `r colnames(trash_df)`. Professor and Gwynnda dataset also collect data on the dumpsters and different types of trash there are. They recorded slightly different types of trash compared to Mr.Trashwheel dataset. For example, professor trash wheel doesn't record number of sports_balls. Gwynnda Trash wheel doesn't have records of glass_bottles, grocery_bags,chip_bags, and sports_balls, but it has records of number of plastic bags which the other two datasets don't have. The total weight of trash collected by Professor Trash Wheel is `r wt_prof`. The total number of cigarette butts collected by Gwynnda in July of 2021 is `r Gwynnda_cigarett`.
+There are `r nrow(combined_df)` rows and `r ncol(combined_df)` columns in the `combined_df` data, which combines data from all three datasets. It contains information on quantity collected of different types of trash at each dumpster by Mr.Trash_Wheel, Professor Trash Wheel, and Gwynnda Trash Wheel. Mr. Trash_wheel dataset has `r nrow(trash_df)` rows and `r ncol(trash_df)` columns. Mr.Trashwheel dataset records information on `r colnames(trash_df)`. Professor and Gwynnda dataset also collect data on the dumpsters and different types of trash there are. The total weight of trash collected by Professor Trash Wheel is `r wt_prof`. The total number of cigarette butts collected by Gwynnda in July of 2021 is `r Gwynnda_cigarett`.
 
 ## Problem 3
 ```{r}
