@@ -109,15 +109,22 @@ amyloid_df=read_csv("data_mci/mci_amyloid.csv", skip=1)|>
   apply(c(1,2),function(x) ifelse(x=="Na", NA, x))|>
   as.data.frame()|>
   mutate(study_id=as.numeric(study_id))|>
-  rename(id=study_id)
+  rename(id=study_id)|>
+  pivot_longer(
+    baseline:time_8,
+    names_to="visit",
+    values_to="amyloid beta 42/40"
+  )
 ```
 The dataset for biomarker amyloid includes information on subjects time(in years) elapsed since the study baseline to the visit where biomarker amyloid 42/40 ratio was measured. A total of 5 times of records are included. The dataset has `r nrow(amyloid_df)` rows and `r ncol(amyloid_df)` columns. 
 
 ```{r}
-bl_only=subset(cleaned_bl, !(id %in% amyloid_df$id))
-amyloid_only=subset(amyloid_df, !(id %in% cleaned_bl$id))
+bl_only=subset(cleaned_bl, !(id %in% pull(amyloid_df,id)))
+amyloid_id=amyloid_df|>
+  distinct(id)
+amyloid_only=subset(amyloid_id, !(id%in% pull(cleaned_bl,id)))
 combined_df_AD=inner_join(cleaned_bl,amyloid_df,by='id')
 write.csv(combined_df_AD, file="data_mci/combined_df.csv")
 ```
 
-There are `r nrow(bl_only)` subjects that is in the baseline study only. There are `r nrow(amyloid_only)` observations in the `amyloid_only` data. The combined dataset of subjects records in both dataset has `r nrow(combined_df_AD)` rows and `r ncol(combined_df_AD)` columns. It combines the variables recorded in both datasets, including `r colnames(combined_df_AD)`
+There are `r nrow(bl_only)` subjects that is in the baseline study only. There are `r nrow(amyloid_only)` subjects that are in the amyloid dataset only. The combined dataset of subjects records in both dataset has `r nrow(combined_df_AD)` rows and `r ncol(combined_df_AD)` columns. It combines the variables recorded in both datasets, including `r colnames(combined_df_AD)`
