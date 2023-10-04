@@ -101,7 +101,7 @@ bl_df=read_csv("data_mci/MCI_baseline.csv",skip=1)|>
 
 cleaned_bl=filter(bl_df,age_at_onset>current_age|age_at_onset=='.')
 ```
-The dataset for baseline MCI includes information on subjects' sex, age, years of education, APOE4 carrier status, and age of onset of AD. A total of `r nrow(cleaned_bl)` subjects were recruited for the baseline study.  `r nrow(cleaned_bl[cleaned_bl$age_at_onset!='.',])` developed MCI. The average baseline age is `r mean(cleaned_bl$current_age)`. `r (nrow(cleaned_bl[cleaned_bl$sex=='Female'&cleaned_bl$apoe4=='APOE4 carrier',])/nrow(cleaned_bl[cleaned_bl$sex=='Female',]))*100`% of women in the baseline study are APOE4 carriers.
+The dataset for baseline MCI includes information on subjects' sex, age, years of education, APOE4 carrier status, and age of onset of AD. A total of `r nrow(cleaned_bl)` subjects were recruited for the baseline study.  `r nrow(cleaned_bl[pull(cleaned_bl,age_at_onset)!='.',])` developed MCI. The average baseline age is `r mean(pull(cleaned_bl,current_age))`. `r (nrow(cleaned_bl[pull(cleaned_bl,sex)=='Female'& pull(cleaned_bl,apoe4)=='APOE4 carrier',])/nrow(cleaned_bl[pull(cleaned_bl,sex)=='Female',]))*100`% of women in the baseline study are APOE4 carriers.
 
 ```{r}
 amyloid_df=read_csv("data_mci/mci_amyloid.csv", skip=1)|>
